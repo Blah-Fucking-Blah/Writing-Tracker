@@ -39,3 +39,16 @@ If you want to change the colors, edit `index.html` and look for the `:root` sec
   --primary-color: #a855f7;  /* The main glow/accent */
   --text-color: #d4b5f7;     /* Main text */
 }
+### ⚠️ (Data Warning)
+
+**Read this before you write.**
+
+This tracker works on **Local Storage**. It is akin to a diary hidden under a floorboard.
+
+1.  **The Haunting:** Your data lives **only** on the device and browser you are currently using.
+    * If you write on your laptop, your phone will not know.
+    * If you write on Chrome, Safari will not know.
+2.  **The Purge:** If you clear your browser's **Cache/Cookies**, your data will be erased.
+3.  **The backup:** To move data between devices, use the **"Archives"** button (top right) to Download your data (`grim_data.json`) and Upload it on the new device.
+
+*Your secrets are safe, but they are also your burden to carry.*
