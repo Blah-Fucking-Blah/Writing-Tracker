@@ -73,8 +73,7 @@
   </style>
  </head>
  <body class="h-screen flex flex-col overflow-hidden">
-  
-  <div class="flex justify-center gap-8 pt-6 pb-2 border-b" style="border-color: color-mix(in srgb, var(--primary-color), transparent 80%);">
+    <div class="flex justify-center gap-8 pt-6 pb-2 border-b" style="border-color: color-mix(in srgb, var(--primary-color), transparent 80%);">
     <button id="tab-tracker" class="tab-active pb-2 px-4 font-header tracking-widest text-sm uppercase transition-all">Daily Ritual</button>
     <button id="tab-sprints" class="tab-inactive pb-2 px-4 font-header tracking-widest text-sm uppercase transition-all">Sprint Chamber</button>
   </div>
@@ -207,8 +206,7 @@
     </div>
 
   </div>
-
-  <script>
+    <script>
     // --- LOCAL STORAGE MANAGER ---
     const STORAGE_KEY = 'dark_romance_tracker_data';
     
@@ -401,4 +399,71 @@
       tbody.innerHTML = '';
       const monthData = writingData.filter(r => new Date(r.date).getMonth() === currentMonth);
       let sprints = [];
-      monthData.forEach(r => (r.sprints || []).forEach(s => sprints.push({...s, date: r.
+      monthData.forEach(r => (r.sprints || []).forEach(s => sprints.push({...s, date: r.date})));
+      sprints.sort((a,b) => b.timestamp - a.timestamp);
+
+      if (!sprints.length) document.getElementById('empty-sprint-msg').style.display = 'block';
+      else {
+        document.getElementById('empty-sprint-msg').style.display = 'none';
+        sprints.forEach(s => {
+          tbody.innerHTML += `
+            <tr class="border-b border-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.02)]">
+              <td class="py-2 pl-2 opacity-70">${s.date.slice(5)}</td>
+              <td class="py-2 opacity-70">${Math.round(s.duration)}m</td>
+              <td class="py-2 text-right pr-2 text-[var(--primary-color)]">${s.words}</td>
+            </tr>`;
+        });
+      }
+      document.getElementById('month-sprint-count').textContent = sprints.length;
+      document.getElementById('month-sprint-avg').textContent = sprints.length ? Math.round(sprints.reduce((a,b)=>a+b.words,0)/sprints.length) : 0;
+    }
+
+    // --- EVENTS ---
+    document.getElementById('add-btn').onclick = () => {
+      const val = parseInt(document.getElementById('word-input').value);
+      if (val > 0) {
+        const rec = getTodayRecord() || { date: getTodayKey(), words: 0, goal: currentGoal };
+        rec.words += val;
+        writingData = DataManager.upsert(rec);
+        updateStats();
+        document.getElementById('word-input').value = '';
+      }
+    };
+
+    document.getElementById('goal-btn').onclick = () => {
+      const val = parseInt(document.getElementById('goal-input').value);
+      if (val > 0) {
+        currentGoal = val;
+        const rec = getTodayRecord();
+        if (rec) { rec.goal = val; writingData = DataManager.upsert(rec); }
+        updateStats();
+      }
+    };
+
+    document.getElementById('prev-month').onclick = () => { currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--} updateStats(); };
+    document.getElementById('next-month').onclick = () => { currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++} updateStats(); };
+
+    // TABS
+    const tTracker = document.getElementById('tab-tracker');
+    const tSprints = document.getElementById('tab-sprints');
+    const vTracker = document.getElementById('view-tracker');
+    const vSprints = document.getElementById('view-sprints');
+
+    tTracker.onclick = () => {
+      tTracker.className = 'tab-active pb-2 px-4 font-header tracking-widest text-sm uppercase';
+      tSprints.className = 'tab-inactive pb-2 px-4 font-header tracking-widest text-sm uppercase';
+      vTracker.classList.remove('hidden'); vSprints.classList.add('hidden');
+    };
+    tSprints.onclick = () => {
+      tSprints.className = 'tab-active pb-2 px-4 font-header tracking-widest text-sm uppercase';
+      tTracker.className = 'tab-inactive pb-2 px-4 font-header tracking-widest text-sm uppercase';
+      vSprints.classList.remove('hidden'); vTracker.classList.add('hidden');
+    };
+
+    // INIT
+    const today = getTodayRecord();
+    if(today && today.goal) currentGoal = today.goal;
+    updateStats();
+  </script>
+ </body>
+</html>
