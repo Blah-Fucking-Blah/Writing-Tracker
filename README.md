@@ -29,16 +29,6 @@ Designed to be hosted on GitHub Pages and embedded directly into **Notion**.
 2.  Double-click to open it in your browser.
 3.  Pin the tab or bookmark it for daily access.
 
-## ⚙️ Customization
-
-If you want to change the colors, edit `index.html` and look for the `:root` section at the top of the CSS:
-
-```css
-:root {
-  --bg-color: #0f0a1e;       /* Background */
-  --primary-color: #a855f7;  /* The main glow/accent */
-  --text-color: #d4b5f7;     /* Main text */
-}
 ### ⚠️ (Data Warning)
 
 **Read this before you write.**
@@ -52,3 +42,14 @@ This tracker works on **Local Storage**. It is akin to a diary hidden under a fl
 3.  **The backup:** To move data between devices, use the **"Archives"** button (top right) to Download your data (`grim_data.json`) and Upload it on the new device.
 
 *Your secrets are safe, but they are also your burden to carry.*
+
+## ⚙️ Customization
+
+If you want to change the colors, edit `index.html` and look for the `:root` section at the top of the CSS:
+
+```css
+:root {
+  --bg-color: #0f0a1e;       /* Background */
+  --primary-color: #a855f7;  /* The main glow/accent */
+  --text-color: #d4b5f7;     /* Main text */
+}
